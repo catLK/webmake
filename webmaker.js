@@ -18,3 +18,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
         dropZone.appendChild(draggableElement);
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const draggableElements = document.querySelectorAll('.draggable');
+    let activeElement = null;
+
+    draggableElements.forEach(elem => {
+        elem.addEventListener('touchstart', (e) => {
+            activeElement = e.target;
+        }, false);
+    });
+
+    const dropZone = document.getElementById('drop-zone');
+    dropZone.addEventListener('touchend', (e) => {
+        if (activeElement) {
+            dropZone.appendChild(activeElement);
+            activeElement = null;
+        }
+    }, false);
+});
