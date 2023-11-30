@@ -2,18 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>网站开发页demo</title>
+    <title>Drag and Drop Demo</title>
     <link rel="stylesheet" href="webmaker.css">
 </head>
 <body>
-    <div class="toolbar">
-        <div id="component1" class="draggable" draggable="true">组件 1</div>
-        <div id="component2" class="draggable" draggable="true">组件 2</div>
-        <div id="component3" class="draggable" draggable="true">组件 3</div>
-    </div>
+    <div id="component1" class="draggable" draggable="true">组件 1</div>
+    <div id="component2" class="draggable" draggable="true">组件 2</div>
+    <div id="component3" class="draggable" draggable="true">组件 3</div>
 
-    <div id="drop-zone" class="drop-zone">
-        拖拽组件到这里
+    <div class="toolbar"></div>
+
+    <!-- 选项模板（隐藏状态，将在 JavaScript 中动态使用） -->
+    <div id="options-template" style="display: none;">
+        <button class="option-btn" data-type="image">图片区域</button>
+        <button class="option-btn" data-type="video">视频播放区</button>
+        <!-- 其他选项按钮 -->
     </div>
 
     <script src="webmaker.js"></script>
