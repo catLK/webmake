@@ -2,12 +2,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const draggableElements = document.querySelectorAll('.draggable');
 
     draggableElements.forEach(elem => {
+        elem.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            e.dataTransfer.setData('text/plain', e.target.id);
+            startDrag(e.target, touch.clientX, touch.clientY);
+        }, false);
         elem.addEventListener('dragstart', (e) => {
             e.dataTransfer.setData('text/plain', e.target.id);
         });
     });
 
     const toolbar = document.querySelector('.toolbar');
+
+    toolbar.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+    }, false);
+toolbar.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        const touch = e.changedTouches[0];
+        finishDrag(touch.clientX, touch.clientY);
+    }, false);
+
+    
     toolbar.addEventListener('dragover', (e) => {
         e.preventDefault();
     });
@@ -20,6 +36,15 @@ document.addEventListener('DOMContentLoaded', () => {
         createOptionsForComponent(droppedElement, e.clientX, e.clientY, toolbar);
     });
 });
+
+function startDrag(elem, x, y) {
+    // 开始拖动元素的逻辑
+}
+
+function finishDrag(x, y) {
+    // 完成拖动的逻辑，这里调用 createOptionsForComponent
+    createOptionsForComponent(currentDraggingElement, x, y, toolbar);
+}
 
 function createOptionsForComponent(component, x, y, toolbar) {
     const options = document.getElementById('options-template').cloneNode(true);
