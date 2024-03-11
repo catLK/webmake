@@ -8,49 +8,35 @@
 <body>
     <h1>Remote Control</h1>
     <button id="requestControl">Request Control</button>
+    <video id="remoteVideo" autoplay></video>
     
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/Screen-Recording.js"></script>
     <script>
-        let controlling = false;
-        let peerConnection;
+        let screenShare = new Screen();
+        let isSharing = false;
 
         document.getElementById('requestControl').addEventListener('click', function () {
-            if (!controlling) {
-                startControl();
+            if (!isSharing) {
+                startScreenShare();
             } else {
-                stopControl();
+                stopScreenShare();
             }
         });
 
-        function startControl() {
-            navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-            .then(function (stream) {
-                peerConnection = new RTCPeerConnection();
-                peerConnection.addStream(stream);
-                peerConnection.createOffer()
-                .then(function (offer) {
-                    return peerConnection.setLocalDescription(offer);
-                })
-                .then(function () {
-                    peerConnection.onicecandidate = function (event) {
-                        if (event.candidate) {
-                            // Send offer to peer
-                        }
-                    };
-                })
-                .catch(function (error) {
-                    console.log('Error creating offer:', error);
-                });
-            })
-            .catch(function (error) {
-                console.log('Error accessing camera:', error);
+        function startScreenShare() {
+            screenShare.startRecording(function (blob) {
+                var url = URL.createObjectURL(blob);
+                document.getElementById('remoteVideo').src = url;
+                isSharing = true;
+                document.getElementById('requestControl').innerText = 'Stop Sharing';
             });
         }
 
-        function stopControl() {
-            peerConnection.close();
-            peerConnection = null;
-            controlling = false;
-            document.getElementById('requestControl').innerText = 'Request Control';
+        function stopScreenShare() {
+            screenShare.stopRecording();
+            isSharing = false;
+            document.getElementById('requestControl').innerText = 'Start Sharing';
         }
     </script>
 </body>
